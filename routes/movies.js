@@ -1,107 +1,89 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../middleware/auth');
 const { check, validationResult } = require('express-validator');
 
 const Movie = require('../models/Movie');
 
 // @route   GET api/movie
-// @desc    Get all users contacts
-router.get('/' , async (req,res)=>{
+// @desc    Get all movie
+router.get('/', async (req, res) => {
     try {
-        const contacts = await Contact.find({ user: req.user.id }).sort({date: -1});
-        res.json(contacts);
+        const movies = await Movie.find();
+        res.json(movies);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
     }
 });
 
-// @route   POST api/contacts
-// @desc    Add new contact
-// router.post('/' ,
-//     auth,
-//     check('name', 'Name is required').not().isEmpty(), 
-//     async (req,res)=>{
-//         const errors = validationResult(req);
-//         if (!errors.isEmpty()) {
-//             return res.status(400).json({ errors: errors.array() });
-//         }
-//         const { name, email, phone, type } = req.body;
-//         try {
-//             const newContact = new Contact({
-//                 name,
-//                 email,
-//                 phone,
-//                 type,
-//                 user: req.user.id
-//             });
-//             const contact = await newContact.save();
-//             res.json(contact);
-//         } catch (err) {
-//         console.error(err.message);
-//         res.status(500).send('Server Error');
-//         }
-//     }
-// );
+// @route   POST api/movie
+// @desc    Add new movie
+router.post(
+    '/',
+    check('title', 'Title is required').not().isEmpty(),
+    check('yearRelease', 'Year Release is required').not().isEmpty(),
+    check('rate', 'Rate is required').not().isEmpty(),
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        const { title, yearRelease, rate } = req.body;
+        try {
+            const newMovie = new Movie({
+                title,
+                yearRelease,
+                rate,
+            });
+            const movie = await newMovie.save();
+            res.json(movie);
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).send('Server Error');
+        }
+    }
+);
 
-// @route   PUT api/contacts/:id
-// @desc    Update contact
-// @access  Private
-// router.put('/:id' , 
-//     auth, 
-//     async (req,res)=>{
-//         const { name, email, phone, type } = req.body;
+// @route   PUT api/movie/:id
+// @desc    Update movie
+router.put('/:id', async (req, res) => {
+    const { title, yearRelease, rate } = req.body;
 
-//         // Build contact object
-//         const contactFields = {};
-//         if (name) contactFields.name = name;
-//         if (email) contactFields.email = email;
-//         if (phone) contactFields.phone = phone;
-//         if (type) contactFields.type = type;
+    // Build movie object
+    const movieFields = {};
+    if (title) movieFields.title = title;
+    if (yearRelease) movieFields.yearRelease = yearRelease;
+    if (rate) movieFields.rate = rate;
 
-//         try {
-//             let contact = await Contact.findById(req.params.id);
+    try {
+        let movie = await Movie.findById(req.params.id);
+        if (!movie) return res.status(404).json({ msg: 'movie not found' });
 
-//             if (!contact) return res.status(404).json({ msg: 'Contact not found' });
-
-//             // Make sure user owns contact
-//             if (contact.user.toString() !== req.user.id) {
-//                 return res.status(401).json({ msg: 'Not authorized' });
-//             }
-//             contact = await Contact.findByIdAndUpdate(
-//                 req.params.id,
-//                 { $set: contactFields },
-//                 { new: true }
-//             );
-//             res.json(contact);
-//         } catch (err) {
-//             console.error(err.message);
-//             res.status(500).send('Server Error');
-//         }
-//     }
-// );
+        movie = await Movie.findByIdAndUpdate(
+            req.params.id,
+            { $set: movieFields },
+            { new: true }
+        );
+        res.json(movie);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
 
 // @route   DELETE api/contacts/:id
 // @desc    Add new contact
 // @access  Private
-// router.delete('/:id' , 
-//     auth, 
-//     async (req,res)=>{
-//         try {
-//             const contact = await Contact.findById(req.params.id);
-//             if (!contact) return res.status(404).json({ msg: 'Contact not found' });
-//             // Make sure user owns contact
-//             if (contact.user.toString() !== req.user.id) {
-//                 return res.status(401).json({ msg: 'Not authorized' });
-//             }
-//             await Contact.findByIdAndRemove(req.params.id);
-//             res.json({ msg: 'Contact removed' });
-//         } catch (err) {
-//             console.error(err.message);
-//             res.status(500).send('Server Error');   
-//         }
-//     }
-// );
+router.delete('/:id', async (req, res) => {
+    try {
+        const movie = await Movie.findById(req.params.id);
+        if (!movie) return res.status(404).json({ msg: 'Movie not found' });
+        await Movie.findByIdAndRemove(req.params.id);
+        res.json({ msg: 'movie removed' });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
 
-module.exports = router
+module.exports = router;

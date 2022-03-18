@@ -10,7 +10,8 @@ const MovieSchema = mongoose.Schema({
     required: true
   },
   rate: {
-    type: String
+    type: String,
+    required: true
   },
   date: {
     type: Date,

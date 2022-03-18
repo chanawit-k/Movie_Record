@@ -3,7 +3,8 @@ import axios from 'axios';
 import UserContext from './userContext';
 import userReducer from './userReducer';
 
-import { LOGIN_SUCCESS, LOGIN_FAIL, CLEAR_ERRORS } from '../types';
+import { LOGIN_SUCCESS, LOGIN_FAIL, CLEAR_ERRORS, LOGOUT } from '../types';
+
 
 const UserState = (props) => {
     const initialState = {
@@ -34,8 +35,14 @@ const UserState = (props) => {
             });
     };
 
+    // logout
+    const logout = async (formdata) => {
+        dispatch({ type: LOGOUT });
+    };
+
+    // clear error
     const clearErrorsLogin = () => {
-        dispatch({ type: CLEAR_ERRORS});
+        dispatch({ type: CLEAR_ERRORS });
     };
 
     return (
@@ -45,6 +52,7 @@ const UserState = (props) => {
                 isAuthenticated: state.isAuthenticated,
                 error: state.error,
                 login,
+                logout,
                 clearErrorsLogin,
             }}
         >

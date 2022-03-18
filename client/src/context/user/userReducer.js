@@ -1,4 +1,4 @@
-import { LOGIN_SUCCESS, LOGIN_FAIL, CLEAR_ERRORS } from '../types';
+import { LOGIN_SUCCESS, LOGIN_FAIL, CLEAR_ERRORS, LOGOUT } from '../types';
 
 export default (state, action) => {
     switch (action.type) {
@@ -16,6 +16,7 @@ export default (state, action) => {
                 error: action.payload,
             };
         case CLEAR_ERRORS:
+        case LOGOUT:
             return {
                 ...state,
                 user: null,

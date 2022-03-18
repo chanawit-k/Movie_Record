@@ -1,11 +1,11 @@
 import React , { Fragment  , useContext }  from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import AuthContext from '../../context/auth/authContext';
+import UserContext from '../../context/user/userContext';
 
 const Navbar = ({ title, icon }) => {
-    const authContext = useContext(AuthContext);
-    const { isAuthenticated, logout, user } = authContext;
+    const userContext = useContext(UserContext);
+    const { isAuthenticated, logout, user } = userContext;
 
     const onLogout = () =>{
       logout()
@@ -13,7 +13,7 @@ const Navbar = ({ title, icon }) => {
 
     const authLinks = (
         <Fragment>
-            <li>Hello {user && user.name}</li>
+            <li>Hello {user && user.roleName}</li>
             <li>
                 <Link onClick={onLogout} to='/login'>
                     <i className='fas fa-sign-out-alt' />{' '}

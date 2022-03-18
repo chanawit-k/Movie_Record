@@ -10,7 +10,7 @@ connectDB()
 app.use(express.json({ extended: false }));
 
 //Define Routes
-app.use('/api/users' , require('./routes/users'));
+app.use('/api/user' , require('./routes/users'));
 app.use('/api/movie' , require('./routes/movies'));
 
 const PORT = process.env.PORT || 5000; 

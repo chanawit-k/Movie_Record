@@ -50,8 +50,8 @@ Navbar.propTypes = {
 };
 
 Navbar.defaultProps = {
-    title: 'Contact Keeper',
-    icon: 'fas fa-id-card-alt',
+    title: 'Movie Record',
+    icon: 'fas fa-solid fa-film',
 };
 
 export default Navbar;

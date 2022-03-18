@@ -1,16 +1,16 @@
 import React, { useState, useContext, useEffect } from 'react';
 import AlertContext from '../../context/alert/alertContext';
-import AuthContext from '../../context/auth/authContext';
+import UserContext from '../../context/user/userContext';
 
 const Login = (props) => {
     const alertContext = useContext(AlertContext);
-    const authContext = useContext(AuthContext);
+    const userContext = useContext(UserContext)    
 
     const { setAlert } = alertContext;
-    const { login, clearErrors, error, isAuthenticated } = authContext;
+    const { login, clearErrorsLogin ,  isAuthenticated ,error } = userContext;
 
     const initialContact = {
-        email: '',
+        userName: '',
         password: '',
     };
 
@@ -19,9 +19,9 @@ const Login = (props) => {
             props.history.push('/');
         }
 
-        if (error === 'Invalid Credentials') {
+        if (error) {
             setAlert(error, 'danger');
-            clearErrors();
+            clearErrorsLogin();
         }
 
         // eslint-disable-next-line
@@ -29,7 +29,7 @@ const Login = (props) => {
 
     const [user, setUser] = useState(initialContact);
 
-    const { email, password } = user;
+    const { userName, password } = user;
 
     const onChange = (e) => {
         setUser({
@@ -40,11 +40,11 @@ const Login = (props) => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        if (email === '' || password === '') {
+        if (userName === '' || password === '') {
             setAlert('Please fill in all fields', 'danger');
         } else {
             login({
-                email,
+                userName,
                 password,
             });
         }
@@ -57,11 +57,11 @@ const Login = (props) => {
             </h1>
             <form onSubmit={onSubmit}>
                 <div className='form-group'>
-                    <label htmlFor='email'>email</label>
+                    <label htmlFor='email'>username</label>
                     <input
-                        type='email'
-                        name='email'
-                        value={email}
+                        type='text'
+                        name='userName'
+                        value={userName}
                         onChange={onChange}
                     />
                 </div>

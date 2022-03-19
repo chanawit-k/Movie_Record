@@ -11,18 +11,20 @@ import ContactState from './context/contact/ContactState';
 import UserState from './context/user/UserState';
 import AuthtState from './context/auth/AuthState';
 import AlertState from './context/alert/AlertState';
+import MovieState from './context/movie/MovieState';
 import './App.css';
 
 function App() {
     return (
         <AuthtState>
+            <MovieState>
             <ContactState>
                 <UserState>
                     <AlertState>
                         <Router>
                             <Fragment>
                                 <Navbar />
-                                <div className='container'>
+                                <div className='container-fluid'>
                                     <Alerts />
                                     <Switch>
                                         <Route
@@ -52,6 +54,7 @@ function App() {
                     </AlertState>
                 </UserState>
             </ContactState>
+            </MovieState>
         </AuthtState>
     );
 }

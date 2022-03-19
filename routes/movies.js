@@ -11,7 +11,6 @@ router.get('/', async (req, res) => {
         const movies = await Movie.find();
         res.json(movies);
     } catch (err) {
-        console.error(err.message);
         res.status(500).send('Server Error');
     }
 });

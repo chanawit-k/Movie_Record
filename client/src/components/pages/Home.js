@@ -1,26 +1,21 @@
-import React, { useContext, useEffect  } from 'react';
-import { useHistory} from 'react-router-dom'
-import Contacts from '../contact/Contacts';
-import ContactForm from '../contact/ContactForm';
-import Contactfilter from '../contact/Contactfilter';
-import AuthContext from '../../context/auth/authContext';
+import React, { useContext, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import UserContext from '../../context/user/userContext';
-const Home = () => {
-    const authContext = useContext(AuthContext);
-    const userContext = useContext(UserContext) 
-    const {  isAuthenticated  } = userContext;
-    const history = useHistory();
-    useEffect(() => {
-        if(!isAuthenticated){
-            history.push("/login")
-        }
-    }, [isAuthenticated ]);
+import Movies from '../movie/Movies';
+import { modal } from 'react-bootstrap'; 
 
-    return (
-        <div className='container'>
-            <Contacts />
-        </div>
-    );
+const Home = () => {
+    const userContext = useContext(UserContext);
+    const { isAuthenticated } = userContext;
+    // useEffect(() => {
+    //     if (!isAuthenticated) {
+    //         history.push('/login');
+    //     }
+    // }, [isAuthenticated]);
+
+    return <div>
+        <Movies /> 
+    </div>;
 };
 
 export default Home;

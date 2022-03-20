@@ -7,12 +7,7 @@ import InsertMovie from '../movie/InsertMovie';
 const Home = () => {
     const userContext = useContext(UserContext);
     const { isAuthenticated } = userContext;
-    // useEffect(() => {
-    //     if (!isAuthenticated) {
-    //         history.push('/login');
-    //     }
-    // }, [isAuthenticated]);
-
+    
     return (
         <div>
             <InsertMovie />

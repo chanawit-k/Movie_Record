@@ -7,6 +7,7 @@ const Movies = () => {
     const { movies, getMovies } = movieContext;
     
     useEffect(() => {
+        
         getMovies();
     });
 

@@ -1,18 +1,35 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
 
+import MovieContext from '../../context/movie/movieContext';
+import UserContext from '../../context/user/userContext';
+
 const MovieItem = ({ movie }) => {
+
+    const movieContext = useContext(MovieContext);
+    const { updateMovie , deleteMovie } = movieContext;
+    const userContext = useContext(UserContext);
+    const { isAuthenticated, user } = userContext;
+
     const [showModal, setModal] = useState(false);
-    const [startDate, setStartDate] = useState(new Date());
+    const [disabled, setDisabled] = useState(true);
+    const [movieState, setMovieState] = useState(movie);
+    const { title, _id, rate, yearRelease } = movieState;
+
+    useEffect(() => {
+        if(isAuthenticated){
+            if(user.roleName === 'manager'){
+                setDisabled(false)
+            }else{
+                setDisabled(true)
+            }
+        }
+    }, [isAuthenticated, user]);
 
     const onOpenModal = () => {
         setModal(true);
     };
-
-    const [movieState, setMovieState] = useState(movie);
-
-    const { title, _id, rate, yearRelease } = movieState;
 
     const onCloseModal = () => {
         setModal(false);
@@ -22,9 +39,20 @@ const MovieItem = ({ movie }) => {
         setMovieState({ ...movieState, [e.target.name]: e.target.value });
     };
 
+    const onSubmit = (e) => {
+        e.preventDefault();
+        onCloseModal();
+        updateMovie(movieState);
+    };
+
+    const onDelete = (e) =>{
+        e.preventDefault();
+        deleteMovie(_id)
+    }
+
     return (
         <div>
-            <div className='card bg-light m-1 '>
+            <div className='card bg-light mx-1 pb-1'>
                 <h3 className='text-primary text-left'>{title} </h3>
                 <ul className='list'>
                     <li>
@@ -36,17 +64,18 @@ const MovieItem = ({ movie }) => {
                 </ul>
                 <p>
                     <button
+                        style={clearButtonShadow}
                         className='btn btn-dark btn-sm'
-                        // onClick={() => {
-                        //     setCurrent(contact);
-                        // }}
                         onClick={onOpenModal}
                     >
                         Edit
                     </button>
                     <button
+                        style={clearButtonShadow}
+                        type='button'
                         className='btn btn-danger btn-sm'
-                        // onClick={onDelete}
+                        onClick={onDelete}
+                        disabled={disabled}
                     >
                         Delete
                     </button>
@@ -55,7 +84,7 @@ const MovieItem = ({ movie }) => {
             <Modal open={showModal} onClose={onCloseModal}>
                 <div className='modal-body'>
                     <h2>Update Movie Detail</h2>
-                    <form className='contact-form'>
+                    <form className='contact-form' onSubmit={onSubmit}>
                         <div className='form-group'>
                             <input
                                 className='form-control'
@@ -85,7 +114,12 @@ const MovieItem = ({ movie }) => {
                             />
                         </div>
                         <div className='form-group'>
-                            <select name='rate' id='rate' onChange={onChange}  value={rate} >
+                            <select
+                                name='rate'
+                                id='rate'
+                                onChange={onChange}
+                                value={rate}
+                            >
                                 <option value='G'>G</option>
                                 <option value='PG'>PG</option>
                                 <option value='M'>M</option>
@@ -95,15 +129,19 @@ const MovieItem = ({ movie }) => {
                         </div>
                         <input
                             className='btn btn-md btn-primary btn-center'
-                            id='sign_up'
-                            type='button'
-                            value='Sign Up'
+                            id='submit'
+                            type='submit'
+                            value='submit'
                         />
                     </form>
                 </div>
             </Modal>
         </div>
     );
+};
+
+const clearButtonShadow = {
+    boxShadow: 'none',
 };
 
 export default MovieItem;

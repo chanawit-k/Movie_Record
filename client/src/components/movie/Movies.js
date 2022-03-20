@@ -1,7 +1,7 @@
 import React, { Fragment, useContext, useEffect } from 'react';
 import MovieContext from '../../context/movie/movieContext';
 import MovieItem from './MovieItem';
-
+import InsertMovie from './InsertMovie';
 const Movies = () => {
     const movieContext = useContext(MovieContext);
     const { movies, getMovies } = movieContext;
